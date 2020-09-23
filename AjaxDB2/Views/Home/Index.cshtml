@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Jquery Ajax </h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <select id="dvlist" class="form-control">
+            <option value="0">--Select Division--</option>
+            @foreach (var item in ViewBag.dv)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+        <br />
+        <select id="dslist" class="form-control">
+            <option value="">--Select District--</option>
+        </select>
+        <br />
+        <select id="uplist" class="form-control">
+            <option value="">--Select Upozila--</option>
+        </select>
+        <br />
+
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+
+
+            $("#dvlist").change(function () {
+                var did = $("#dvlist option:selected").val();
+
+                $.ajax({
+                    url: '/home/getDistrict/' + did,
+                    type: 'GET',
+                    cache: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        console.log(data);
+                        $("#dslist").empty();
+                        $.each(data, function (i, obj) {
+
+                            var s = '<option value="' + obj.id + '">' + obj.name + '</option>';
+                            $("#dslist").append(s);
+
+
+                        });
+
+                    },
+
+                    error: function (st) {
+                        console.log(st);
+
+                    }
+
+
+
+
+
+                });
+
+
+            });
+           
+            $("#dslist").change(function () {
+                var did = $("#dslist option:selected").val();
+
+                $.ajax({
+                    url: '/home/getUpazila/' + did,
+                    type: 'GET',
+                    cache: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        console.log(data);
+                        $("#uplist").empty();
+                        $.each(data, function (i, obj) {
+
+                            var s = '<option value="' + obj.id + '">' + obj.name + '</option>';
+                            $("#uplist").append(s);
+
+
+                        });
+
+                    },
+
+                    error: function (st) {
+                        console.log(st);
+
+                    }
+
+
+
+
+
+                });
+
+
+            });
+
+
+
+
+       
+
+
+        });
+    </script>
+}
